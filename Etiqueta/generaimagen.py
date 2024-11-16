@@ -15,7 +15,24 @@ def generate_image(template_path, constant_texts, constant_positions, texts, pos
 
     # Agregar cada línea de texto dinámico a la imagen
     for text, position in zip(texts, positions):
-        draw.text(position, text, font=font, fill=text_color)
+        if ':' in text:
+            # Separar la parte izquierda y derecha del texto
+            left_part, right_part = text.split(':', 1)
+            left_part += ':'
+
+            # Dibujar la parte izquierda en negrita
+            draw.text(position, left_part, font=bold_font, fill=text_color)
+
+            # Calcular la posición de la parte derecha
+            left_bbox = draw.textbbox(position, left_part, font=bold_font)
+            left_width = left_bbox[2] - left_bbox[0]
+            right_position = (position[0] + left_width, position[1])
+
+            # Dibujar la parte derecha en regular
+            draw.text(right_position, right_part, font=font, fill=text_color)
+        else:
+            # Dibujar el texto completo en regular si no contiene ':'
+            draw.text(position, text, font=font, fill=text_color)
 
     return image
 
