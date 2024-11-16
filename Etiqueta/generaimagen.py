@@ -1,16 +1,17 @@
 from PIL import Image, ImageDraw, ImageFont
 
-def generate_image(template_path, constant_texts, constant_positions, texts, positions, font_path, font_size, text_color):
+def generate_image(template_path, constant_texts, constant_positions, texts, positions, font_path, font_size, text_color, bold_font_path):
     # Cargar la imagen de plantilla
     image = Image.open(template_path)
     draw = ImageDraw.Draw(image)
 
-    # Cargar la fuente
+    # Cargar las fuentes
     font = ImageFont.truetype(font_path, font_size)
+    bold_font = ImageFont.truetype(bold_font_path, font_size)
 
-    # Agregar los textos constantes a la imagen
+    # Agregar los textos constantes a la imagen con fuente en negrita
     for text, position in zip(constant_texts, constant_positions):
-        draw.text(position, text, font=font, fill=text_color)
+        draw.text(position, text, font=bold_font, fill=text_color)
 
     # Agregar cada línea de texto dinámico a la imagen
     for text, position in zip(texts, positions):
@@ -62,13 +63,14 @@ if __name__ == "__main__":
     positions = [(initial_position[0], initial_position[1] + i * line_height) for i in range(len(texts))]
 
     font_path = "arial.ttf"          # Ruta de la fuente TrueType
+    bold_font_path = "arialbd.ttf"   # Ruta de la fuente TrueType en negrita
     font_size = 14                   # Tamaño de la fuente ajustado
     text_color = (0, 0, 0)           # Color del texto negro (R, G, B)
 
     # Generar las imágenes y guardarlas en una lista
     images = []
     for _ in range(num_copias):
-        image = generate_image(template_path, constant_texts, constant_positions, texts, positions, font_path, font_size, text_color)
+        image = generate_image(template_path, constant_texts, constant_positions, texts, positions, font_path, font_size, text_color, bold_font_path)
         images.append(image)
 
     # Crear páginas del PDF con 3 imágenes por página y márgenes
