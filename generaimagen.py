@@ -24,20 +24,19 @@ if __name__ == "__main__":
     # Datos constantes
     constant_texts = [
         "Nombre: Eduardo Cabrera Espinoza",
-        "Rut: 5.546.781-1",
-        "Teléfono: 56 9 20547036"
+        "Rut: 5.546.781-1     Teléfono: 56 9 20547036"
     ]
     constant_positions = [
         (170, 30),  # Coordenadas para el nombre
-        (170, 50),  # Coordenadas para el rut
-        (170, 70)  # Coordenadas para el teléfono
+        (170, 50)  # Coordenadas para el rut y telefono
     ]
 
     # Solicitar datos dinámicos al usuario
     tipo_entrega = input("Ingrese el tipo de entrega: ")
     nombre = input("Ingrese el nombre: ")
     rut = input("Ingrese el RUT: ")
-    direccion = input("Ingrese la dirección: ")
+    direccion1 = input("Ingrese la primera parte de la dirección: ")
+    direccion2 = input("Ingrese la segunda parte de la dirección: ")
     telefono = input("Ingrese el teléfono: ")
     empresa_transporte = input("Ingrese la empresa de transporte: ")
 
@@ -49,13 +48,14 @@ if __name__ == "__main__":
         f"Tipo de Entrega: {tipo_entrega}",
         f"Nombre: {nombre}",
         f"RUT: {rut}",
-        f"Dirección: {direccion}",
+        f"Dirección: {direccion1}",
+        f"{direccion2}",
         f"Teléfono: {telefono}",
         f"Empresa de Transporte: {empresa_transporte}"
     ]
 
     # Definir la posición inicial y el incremento vertical para los textos dinámicos
-    initial_position = (170, 110)
+    initial_position = (170, 85)
     line_height = 20  # Altura de cada línea de texto
 
     # Calcular las posiciones para cada línea de texto dinámico
