@@ -1,0 +1,7 @@
+*.jpg
+*.png
+*.pdf
+bkps/
+__pycache__/pytube.cpython-310.pyc
+*.mp4
+*.mp3
