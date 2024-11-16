@@ -106,5 +106,5 @@ if __name__ == "__main__":
         pdf_pages.append(page)
 
     # Guardar todas las páginas en un único archivo PDF
-    pdf_path = "resultado.pdf"
+    pdf_path = f"salida_{nombre}.pdf"
     pdf_pages[0].save(pdf_path, save_all=True, append_images=pdf_pages[1:], format="PDF")
