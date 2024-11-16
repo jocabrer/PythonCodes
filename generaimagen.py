@@ -1,6 +1,6 @@
 from PIL import Image, ImageDraw, ImageFont
 
-def generate_image(template_path, texts, positions, font_path, font_size, text_color):
+def generate_image(template_path, constant_texts, constant_positions, texts, positions, font_path, font_size, text_color):
     # Cargar la imagen de plantilla
     image = Image.open(template_path)
     draw = ImageDraw.Draw(image)
@@ -8,7 +8,11 @@ def generate_image(template_path, texts, positions, font_path, font_size, text_c
     # Cargar la fuente
     font = ImageFont.truetype(font_path, font_size)
 
-    # Agregar cada línea de texto a la imagen
+    # Agregar los textos constantes a la imagen
+    for text, position in zip(constant_texts, constant_positions):
+        draw.text(position, text, font=font, fill=text_color)
+
+    # Agregar cada línea de texto dinámico a la imagen
     for text, position in zip(texts, positions):
         draw.text(position, text, font=font, fill=text_color)
 
@@ -16,6 +20,18 @@ def generate_image(template_path, texts, positions, font_path, font_size, text_c
 
 if __name__ == "__main__":
     template_path = "plantilla.jpg"  # Ruta de la imagen de plantilla
+
+    # Datos constantes
+    constant_texts = [
+        "Nombre: Eduardo Cabrera Espinoza",
+        "Rut: 5.546.781-1",
+        "Teléfono: 56 9 20547036"
+    ]
+    constant_positions = [
+        (170, 30),  # Coordenadas para el nombre
+        (170, 50),  # Coordenadas para el rut
+        (170, 70)  # Coordenadas para el teléfono
+    ]
 
     # Solicitar datos dinámicos al usuario
     tipo_entrega = input("Ingrese el tipo de entrega: ")
@@ -28,7 +44,7 @@ if __name__ == "__main__":
     # Solicitar la cantidad de copias
     num_copias = int(input("Ingrese la cantidad de copias: "))
 
-    # Crear una lista de textos y posiciones
+    # Crear una lista de textos dinámicos
     texts = [
         f"Tipo de Entrega: {tipo_entrega}",
         f"Nombre: {nombre}",
@@ -38,11 +54,11 @@ if __name__ == "__main__":
         f"Empresa de Transporte: {empresa_transporte}"
     ]
 
-    # Definir la posición inicial y el incremento vertical
-    initial_position = (180, 110)
+    # Definir la posición inicial y el incremento vertical para los textos dinámicos
+    initial_position = (170, 110)
     line_height = 20  # Altura de cada línea de texto
 
-    # Calcular las posiciones para cada línea de texto
+    # Calcular las posiciones para cada línea de texto dinámico
     positions = [(initial_position[0], initial_position[1] + i * line_height) for i in range(len(texts))]
 
     font_path = "arial.ttf"          # Ruta de la fuente TrueType
@@ -52,20 +68,21 @@ if __name__ == "__main__":
     # Generar las imágenes y guardarlas en una lista
     images = []
     for _ in range(num_copias):
-        image = generate_image(template_path, texts, positions, font_path, font_size, text_color)
+        image = generate_image(template_path, constant_texts, constant_positions, texts, positions, font_path, font_size, text_color)
         images.append(image)
 
-    # Crear páginas del PDF con 3 imágenes por página
+    # Crear páginas del PDF con 3 imágenes por página y márgenes
     pdf_pages = []
+    margin = 35  # Tamaño del margen en píxeles
     for i in range(0, len(images), 3):
-        # Crear una nueva página en blanco
-        page_width, page_height = images[0].size[0], images[0].size[1] * 3
+        # Crear una nueva página en blanco con márgenes
+        page_width, page_height = images[0].size[0] + 2 * margin, images[0].size[1] * 3 + 4 * margin
         page = Image.new('RGB', (page_width, page_height), (255, 255, 255))
 
-        # Pegar hasta 3 imágenes en la página
+        # Pegar hasta 3 imágenes en la página con márgenes
         for j in range(3):
             if i + j < len(images):
-                page.paste(images[i + j], (0, j * images[0].size[1]))
+                page.paste(images[i + j], (margin, margin + j * (images[0].size[1] + margin)))
 
         pdf_pages.append(page)
 
